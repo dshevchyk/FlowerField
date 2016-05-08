@@ -8,7 +8,8 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-    qmlRegisterType<AdMobQml,1>("AdMobQml", 1, 0, "AdMobQml");
+    EAdSize::declareQML();
+    AdMobQml::declareQML();
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     return app.exec();
 }

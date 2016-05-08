@@ -18,6 +18,14 @@ import com.google.android.gms.ads.AdView;
 
 
 class AdMobView {
+    private static final int BANNER = 0;
+    private static final int FULL_BANNER = 1;
+    private static final int LARGE_BANNER = 2;
+    private static final int LEADERBOARD = 3;
+    private static final int MEDIUM_RECTANGLE = 4;
+    private static final int WIDE_SKYSCRAPER = 5;
+    private static final int SMART_BANNER = 6;
+
     private AdView view = null;
     private Activity context = null;
     private int x = 0;
@@ -25,6 +33,8 @@ class AdMobView {
     private int width = 0;
     private int height = 0;
     private boolean isUpdateRequested = false;
+    private boolean isAdUnitAdSet = false;
+    private boolean isAdSizeSet = false;
     private FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams( width, height);
 
     public AdMobView(final Activity context) {
@@ -32,19 +42,14 @@ class AdMobView {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                view = new AdView(context);
-                ViewGroup viewgroup = (ViewGroup) context.getWindow().getDecorView().findViewById(android.R.id.content);
-                view.setVisibility(View.VISIBLE);
-                requestLayout();
-                viewgroup.addView(view);
-
-                //temp
-                view.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
-                view.setAdListener(new ToastAdListener(context));
-                view.setAdSize(AdSize.BANNER);
-                AdRequest adRequest = new AdRequest.Builder()
-                  .build();
-                view.loadAd( adRequest);
+                synchronized(AdMobView.this) {
+                    view = new AdView(context);
+                    ViewGroup viewgroup = (ViewGroup) context.getWindow().getDecorView().findViewById(android.R.id.content);
+                    view.setVisibility(View.VISIBLE);
+                    requestLayout();
+                    view.setAdListener(new ToastAdListener(context));
+                    viewgroup.addView(view);
+                }
             }
         });
     }
@@ -53,9 +58,11 @@ class AdMobView {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                view = new AdView(context);
-                ViewGroup viewgroup = (ViewGroup) context.getWindow().getDecorView().findViewById(android.R.id.content);
-                viewgroup.removeView(view);
+                synchronized(AdMobView.this) {
+                    view = new AdView(context);
+                    ViewGroup viewgroup = (ViewGroup) context.getWindow().getDecorView().findViewById(android.R.id.content);
+                    viewgroup.removeView(view);
+                }
             }
         });
     }
@@ -73,6 +80,11 @@ class AdMobView {
                     layoutParams.topMargin = AdMobView.this.y;
                     layoutParams.leftMargin = AdMobView.this.x;
                     view.setLayoutParams(layoutParams);
+                    if(AdMobView.this.isAdSizeSet == true && AdMobView.this.isAdUnitAdSet == true) {
+                        AdRequest adRequest = new AdRequest.Builder()
+                          .build();
+                        view.loadAd( adRequest);
+                    }
                     isUpdateRequested = false;
                 }
             }
@@ -113,4 +125,80 @@ class AdMobView {
         AdMobView.this.height = height;
         requestLayout();
     }
+
+    public synchronized void setAdUnitId(final String adUnitId) {
+        Log.i("test log", "AdMobView setAdUnitId called " + adUnitId);
+        context.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized(AdMobView.this) {
+
+                    view.setAdUnitId(adUnitId);
+                    AdMobView.this.isAdUnitAdSet = true;
+                    if(AdMobView.this.isAdSizeSet == true) {
+                        AdRequest adRequest = new AdRequest.Builder()
+                          .build();
+                        view.loadAd( adRequest);
+                    }
+                }
+            }
+        });
+
+    }
+    public synchronized void setAdSize(final int adSize) {
+
+        Log.i("test log", "AdMobView setAdSize called " + adSize);
+        context.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized(AdMobView.this) {
+                    switch(adSize) {
+
+                        case BANNER:
+                        {
+                            view.setAdSize(AdSize.BANNER);
+                        }
+                        break;
+                        case FULL_BANNER:
+                        {
+                            view.setAdSize(AdSize.FULL_BANNER);
+                        }
+                        break;
+                        case LARGE_BANNER:
+                        {
+                            view.setAdSize(AdSize.LARGE_BANNER);
+                        }
+                        break;
+                        case LEADERBOARD:
+                        {
+                            view.setAdSize(AdSize.LEADERBOARD);
+                        }
+                        break;
+                        case MEDIUM_RECTANGLE:
+                        {
+                            view.setAdSize(AdSize.MEDIUM_RECTANGLE);
+                        }
+                        break;
+                        case WIDE_SKYSCRAPER:
+                        {
+                            view.setAdSize(AdSize.WIDE_SKYSCRAPER);
+                        }
+                        break;
+                        case SMART_BANNER:
+                        {
+                            view.setAdSize(AdSize.SMART_BANNER);
+                        }
+                        break;
+                    }
+                    AdMobView.this.isAdSizeSet = true;
+                    if(AdMobView.this.isAdUnitAdSet == true) {
+                        AdRequest adRequest = new AdRequest.Builder()
+                          .build();
+                        view.loadAd( adRequest);
+                    }
+                }
+            }
+        });
+    }
+
 }
