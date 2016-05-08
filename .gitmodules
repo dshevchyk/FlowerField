@@ -1,0 +1,3 @@
+[submodule "qtExtension"]
+	path = qtExtension
+	url = https://github.com/dshevchyk/qtExtension.git
