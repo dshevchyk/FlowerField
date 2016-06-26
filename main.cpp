@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include "qtExtension/src/admob/admobqml.h"
 
+
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);

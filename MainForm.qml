@@ -19,9 +19,9 @@ Rectangle {
         anchors.left: parent.left
 
         width: rectMain.width
-        height: 150
+        height: 50
         adUnitId: "ca-app-pub-3940256099942544/6300978111"
-        adSize: AdSize.BANNER
+        adSize: AdSize.SMART_BANNER
         Rectangle {
             color: "#11111111"
             anchors.fill: parent
@@ -33,7 +33,7 @@ Rectangle {
         anchors.left: parent.left
 
         width: rectMain.width
-        height: 150
+        height: 50
         adUnitId: "ca-app-pub-3940256099942544/6300978111"
         adSize: AdSize.BANNER
         Rectangle {

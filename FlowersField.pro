@@ -1,6 +1,9 @@
 TEMPLATE = app
 
-QT += qml quick androidextras
+QT += qml quick
+android {
+    QT += androidextras
+}
 CONFIG += c++11
 
 HEADERS += \
@@ -14,11 +17,31 @@ SOURCES += main.cpp \
 
 
 android {
+
     SOURCES += qtExtension/src/admob/android/admobimpl.cpp
 }
 
 ios {
-    SOURCES += qtExtension/src/admob/ios/admobimpl.cpp
+
+    HEADERS += qtExtension/src/admob/ios/AdMobBannerIosProtected.h
+    OBJECTIVE_SOURCES += qtExtension/src/admob/ios/AdMobBannerIosProtected.mm
+
+    OBJECTIVE_SOURCES += qtExtension/src/admob/ios/admobimpl.mm
+
+    LIBS += -F $$PWD/ios/libs/GoogleMobileAds/ -framework GoogleMobileAds \
+                -framework AVFoundation \
+                -framework AudioToolbox \
+                -framework CoreTelephony \
+                -framework MessageUI \
+                -framework SystemConfiguration \
+                -framework CoreGraphics \
+                -framework AdSupport \
+                -framework StoreKit \
+                -framework EventKit \
+                -framework EventKitUI \
+                -framework CoreMedia
+
+    #QMAKE_INFO_PLIST = ios/Info.plist
 }
 RESOURCES += qml.qrc
 
