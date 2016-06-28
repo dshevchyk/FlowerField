@@ -1,4 +1,5 @@
 import QtQuick 2.6
+import QtQuick.Controls 1.4
 
 import AdMobQml 1.0
 import AdSize 1.0
@@ -14,7 +15,7 @@ Rectangle {
 
 
     AdMobQml {
-        id: adMob
+        id: adMobTop
         anchors.top: parent.top
         anchors.left: parent.left
 
@@ -41,8 +42,28 @@ Rectangle {
             anchors.fill: parent
         }
     }
-    Text {
-        anchors.centerIn: parent
-        text: adMob.adUnitId
+    ListModel {
+        id: listmodel
+        ListElement {
+            name: "Bill Smith"
+            number: "555 3264"
+        }
+        ListElement {
+            name: "John Brown"
+            number: "555 8426"
+        }
+        ListElement {
+            name: "Sam Wise"
+            number: "555 0473"
+        }
+    }
+
+    ListView {
+        width: 180; height: 200
+        anchors.top: adMobTop.bottom
+        model: listmodel
+        delegate: Text {
+            text: name + ": " + number
+        }
     }
 }

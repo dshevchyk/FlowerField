@@ -7,6 +7,7 @@ package org.qtproject.example.AdMob;
 
 
 import android.util.Log;
+import android.util.DisplayMetrics;
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ class AdMobView {
 
     private AdView view = null;
     private Activity context = null;
+    private DisplayMetrics metrics = null;
     private int x = 0;
     private int y = 0;
     private int width = 0;
@@ -39,6 +41,7 @@ class AdMobView {
 
     public AdMobView(final Activity context) {
         this.context = context;
+        this.metrics = context.getResources().getDisplayMetrics();
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -104,25 +107,25 @@ class AdMobView {
     public synchronized void setX(int x) {
 
         Log.i("test log", "AdMobView setX called " + x);
-        AdMobView.this.x = x;
+        AdMobView.this.x = (int)(x * metrics.density);
         requestLayout();
         
     }
     
     public synchronized void setY(final int y) {
         Log.i("test log", "AdMobView setY called " + y);
-        AdMobView.this.y = y;
+        AdMobView.this.y = (int)(y * metrics.density);
         requestLayout();
     }
     public synchronized void setWidth(final int width) {
 
         Log.i("test log", "AdMobView setWidth called " + width);
-        AdMobView.this.width = width;
+        AdMobView.this.width = (int)(width * metrics.density);
         requestLayout();
     }
     public synchronized void setHeight(final int height) {
         Log.i("test log", "AdMobView setHeight called " + height);
-        AdMobView.this.height = height;
+        AdMobView.this.height = (int)(height * metrics.density);
         requestLayout();
     }
 
